@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myou.shardingsphere.mapper.TAddressMapper">
+
+    <resultMap type="com.myou.shardingsphere.model.entity.TAddress" id="TAddressMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="addressName" column="address_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <!--表字段-->
+    <sql id="column">id,address_name,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s')as create_time,DATE_FORMAT(modify_time,'%Y-%m-%d %H:%i:%s')as modify_time</sql>
+
+    <!--根据ID查询单条数据-->
+    <select id="selectById" resultMap="TAddressMap">
+        select <include refid="column"></include>
+        from t_address
+        where id = #{id}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectList" resultMap="TAddressMap">
+        select <include refid="column"></include>
+        from t_address
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="addressName != null and addressName != ''">
+                and address_name = #{addressName}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="modifyTime != null">
+                and modify_time = #{modifyTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ds1.t_address(address_name, create_time, modify_time)
+        values (#{addressName}, now(), now())
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ds1.t_address
+        <set>
+         <if test="addressName != null and addressName != ''">
+                address_name = #{addressName},
+         </if>
+         <if test="createTime != null">
+                create_time = #{createTime},
+         </if>
+         <if test="modifyTime != null">
+                modify_time = #{modifyTime},
+         </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ds1.t_address where id = #{id}
+    </delete>
+
+</mapper>

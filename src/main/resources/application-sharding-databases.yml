@@ -1,0 +1,48 @@
+# 分库案例
+spring:
+  shardingsphere:
+    datasource: # 多数据库配置
+      names: ds0, ds1
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.100.10:3306/ds0?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://47.99.204.145:3306/ds1?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: yunjia@123
+    sharding: # 拆分配置
+      default-database-strategy: # 默认分库设置
+        inline:
+          sharding-column: user_id
+          algorithm-expression: ds$->{user_id % 2}
+      broadcast-tables: # 广播表
+        - global_dictionary
+      binding-tables:  # 绑定表
+        - t_order
+        - t_order_item
+      tables:
+        global_dictionary:
+          actual-data-nodes: ds$->{0..1}.t_order # 表指定规则 即使是广播表，也需要配置路由节点
+        t_order:
+          actual-data-nodes: ds$->{0..1}.t_order
+          key-generator: # 分布式主键算法生产配置
+            column: id
+            type: SNOWFLAKE # 分布式主键生产可自定义，实现ShardingKeyGenerator，通过spi配置实现
+            props:
+              worker:
+                id: 1
+        t_order_item:
+          actual-data-nodes: ds$->{0..1}.t_order
+          key-generator: # 分布式主键算法生产配置
+            column: id
+            type: SNOWFLAKE
+            props:
+              worker:
+                id: 1
+    props:
+      sql.show: true

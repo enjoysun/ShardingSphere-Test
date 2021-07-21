@@ -2,12 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
     <groupId>com.myou</groupId>
     <artifactId>sharding-sphere</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -15,7 +9,56 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
+        <shardingsphere.version>4.1.1</shardingsphere.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <json.web.token>0.9.0</json.web.token>
+        <spring.security.crypto>5.4.5</spring.security.crypto>
+        <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <swagger-models.version>1.5.22</swagger-models.version>
+        <pagehelper-spring-boot-starter.version>1.0.0</pagehelper-spring-boot-starter.version>
+        <lombok.version>1.18.16</lombok.version>
+        <span.version>1.0.0-SNAPSHOT</span.version>
+        <lark-infrastructure.version>1.0.1</lark-infrastructure.version>
+        <dispersed.version>1.0.0</dispersed.version>
+        <mysql-connector-java.version>5.1.47</mysql-connector-java.version>
+        <spring-boot-starter-jdbc.version>2.3.2.RELEASE</spring-boot-starter-jdbc.version>
+        <hutool-all.version>5.5.7</hutool-all.version>
+        <rxtxcomm.version>2.2</rxtxcomm.version>
+        <jna.version>5.8.0</jna.version>
+        <jacob.version>1.18</jacob.version>
+        <java-pringt-libs-fat.version>1.0.0</java-pringt-libs-fat.version>
+        <clinic-subpackage.version>1.0-SNAPSHOT</clinic-subpackage.version>
+        <lark-rest.version>1.0-SNAPSHOT</lark-rest.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.yunjia.lark</groupId>
+                <artifactId>dispersed</artifactId>
+                <version>${dispersed.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.yunjia</groupId>
+                <artifactId>lark-infrastructure</artifactId>
+                <version>${lark-infrastructure.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.yunjia</groupId>
+                <artifactId>lark-basis</artifactId>
+                <version>${span.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -32,6 +75,37 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>compile</scope>
+            <version>1.18.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>

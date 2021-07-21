@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: sharding-databases
+server:
+  port: 8080
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.myou.shardingsphere.model.entity
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#logging:
+#  level:
+#    com.myou.shardingsphere.mapper: trace
