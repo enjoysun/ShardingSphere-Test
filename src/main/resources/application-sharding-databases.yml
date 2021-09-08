@@ -44,5 +44,8 @@ spring:
             props:
               worker:
                 id: 1
+        t_address:
+          actual-data-nodes: ds0.t_address
+      default-data-source-name: ds0
     props:
       sql.show: true

@@ -11,20 +11,69 @@
         <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap type="com.myou.shardingsphere.model.entity.TOrder" id="TOrderAndItemMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="addressId" column="address_id" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <association property="orderItem" javaType="com.myou.shardingsphere.model.entity.TOrderItem">
+            <result property="id" column="id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="orderId" column="order_id" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        </association>
+    </resultMap>
+
 
     <!--表字段-->
     <sql id="column">id,user_id,address_id,status,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s')as create_time,DATE_FORMAT(modify_time,'%Y-%m-%d %H:%i:%s')as modify_time</sql>
 
     <!--根据ID查询单条数据-->
     <select id="selectById" resultMap="TOrderMap">
-        select <include refid="column"></include>
+        select
+        <include refid="column"></include>
         from t_order
         where id = #{id}
     </select>
 
+    <select id="selectInId" resultMap="TOrderMap">
+        select
+        <include refid="column"></include>
+        from t_order
+        where id in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectLtById" resultMap="TOrderMap">
+        select
+        <include refid="column"></include>
+        from t_order
+        where id > #{id}
+    </select>
+
+    <select id="selectDescById" resultMap="TOrderAndItemMap">
+        select
+        o.id,
+        o.user_id,
+        o.address_id,
+        o.`status`,
+        i.item_name
+        from t_order as o left join t_order_item as i
+        on o.id = i.order_id
+        where o.id=#{id}
+    </select>
+
     <!--通过实体作为筛选条件查询-->
     <select id="selectList" resultMap="TOrderMap">
-        select <include refid="column"></include>
+        select
+        <include refid="column"></include>
         from t_order
         <where>
             <if test="id != null">
@@ -48,6 +97,15 @@
         </where>
     </select>
 
+    <select id="selectListLimit" resultMap="TOrderMap">
+        select
+        <include refid="column"></include>
+        from t_order
+        where id > 630434580024791040
+        order by id
+        limit 10
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into ds1.t_order(user_id, address_id, status, create_time, modify_time)
@@ -58,21 +116,21 @@
     <update id="update">
         update ds1.t_order
         <set>
-         <if test="userId != null">
+            <if test="userId != null">
                 user_id = #{userId},
-         </if>
-         <if test="addressId != null">
+            </if>
+            <if test="addressId != null">
                 address_id = #{addressId},
-         </if>
-         <if test="status != null">
+            </if>
+            <if test="status != null">
                 status = #{status},
-         </if>
-         <if test="createTime != null">
+            </if>
+            <if test="createTime != null">
                 create_time = #{createTime},
-         </if>
-         <if test="modifyTime != null">
+            </if>
+            <if test="modifyTime != null">
                 modify_time = #{modifyTime},
-         </if>
+            </if>
         </set>
         where id = #{id}
     </update>

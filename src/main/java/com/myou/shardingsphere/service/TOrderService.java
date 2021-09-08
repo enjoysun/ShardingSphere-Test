@@ -1,8 +1,11 @@
 package com.myou.shardingsphere.service;
 
 import com.myou.shardingsphere.model.dto.TOrderDto;
+import com.myou.shardingsphere.model.entity.TOrder;
 import com.myou.shardingsphere.model.vo.TOrderVo;
 import com.github.pagehelper.*;
+
+import java.util.List;
 
 /**
  * 订单(TOrder)表服务接口
@@ -20,6 +23,12 @@ public interface TOrderService {
      */
     TOrderVo findById(Long id);
 
+    TOrderVo selectDescById(Long id);
+
+    List<TOrderVo> selectInId(List<Long> ids);
+
+    List<TOrderVo> selectLtById(Long id);
+
     /**
      * 查询多条数据
      *
@@ -29,6 +38,8 @@ public interface TOrderService {
      * @return 对象列表
      */
     PageInfo<TOrderVo> findPageList(TOrderDto tOrderDto, int pageNum, int pageSize);
+
+    PageInfo<TOrderVo> selectListLimit();
 
     /**
      * 新增数据

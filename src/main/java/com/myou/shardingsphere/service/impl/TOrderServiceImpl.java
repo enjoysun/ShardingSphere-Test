@@ -2,13 +2,17 @@ package com.myou.shardingsphere.service.impl;
 
 import com.myou.shardingsphere.model.entity.TOrder;
 import com.myou.shardingsphere.model.dto.TOrderDto;
+import com.myou.shardingsphere.model.vo.TOrderItemVo;
 import com.myou.shardingsphere.model.vo.TOrderVo;
 import com.myou.shardingsphere.mapper.TOrderMapper;
 import com.myou.shardingsphere.service.TOrderService;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.*;
+
 import java.util.*;
+
 import org.springframework.beans.BeanUtils;
+
 import javax.annotation.Resource;
 
 /**
@@ -32,14 +36,63 @@ public class TOrderServiceImpl implements TOrderService {
     @Override
     public TOrderVo findById(Long id) {
         TOrder tOrder = this.tOrderMapper.selectById(id);
-        
+
         //将TOrder转成TOrderVo
         TOrderVo tOrderVo = null;
-        if (tOrder != null){
+        if (tOrder != null) {
             tOrderVo = new TOrderVo();
             BeanUtils.copyProperties(tOrder, tOrderVo);
         }
-        
+
+        return tOrderVo;
+    }
+
+    @Override
+    public List<TOrderVo> selectInId(List<Long> ids) {
+        List<TOrder> tOrders = this.tOrderMapper.selectInId(ids);
+
+        List<TOrderVo> orderVos = new ArrayList<>();
+        //将TOrder转成TOrderVo
+        tOrders.forEach(item -> {
+            TOrderVo tOrderVo = null;
+            tOrderVo = new TOrderVo();
+            BeanUtils.copyProperties(item, tOrderVo);
+            orderVos.add(tOrderVo);
+
+        });
+        return orderVos;
+    }
+
+    @Override
+    public List<TOrderVo> selectLtById(Long id){
+        List<TOrder> tOrders = this.tOrderMapper.selectLtById(id);
+
+        List<TOrderVo> orderVos = new ArrayList<>();
+        //将TOrder转成TOrderVo
+        tOrders.forEach(item -> {
+            TOrderVo tOrderVo = null;
+            tOrderVo = new TOrderVo();
+            BeanUtils.copyProperties(item, tOrderVo);
+            orderVos.add(tOrderVo);
+
+        });
+        return orderVos;
+    }
+
+    @Override
+    public TOrderVo selectDescById(Long id) {
+        TOrder tOrder = this.tOrderMapper.selectDescById(id);
+
+        //将TOrder转成TOrderVo
+        TOrderVo tOrderVo = null;
+        if (tOrder != null) {
+            tOrderVo = new TOrderVo();
+            BeanUtils.copyProperties(tOrder, tOrderVo);
+            TOrderItemVo orderItemVo = new TOrderItemVo();
+            BeanUtils.copyProperties(tOrder.getOrderItem(), orderItemVo);
+            tOrderVo.setOrderItemVo(orderItemVo);
+        }
+
         return tOrderVo;
     }
 
@@ -47,21 +100,30 @@ public class TOrderServiceImpl implements TOrderService {
      * 查询多条数据
      *
      * @param tOrderDto 实例对象
-     * @param pageNum 页数
-     * @param pageSize 每页条数
+     * @param pageNum   页数
+     * @param pageSize  每页条数
      * @return 对象列表
      */
     @Override
     public PageInfo<TOrderVo> findPageList(TOrderDto tOrderDto, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        
+
         //将TOrder转成TOrderVo
         TOrder tOrder = new TOrder();
         BeanUtils.copyProperties(tOrderDto, tOrder);
         List<TOrder> tOrderList = this.tOrderMapper.selectList(tOrder);
-        
+
         PageInfo<TOrderVo> pageInfo = new PageInfo<>();
         BeanUtils.copyProperties(new PageInfo<>(tOrderList), pageInfo);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<TOrderVo> selectListLimit(){
+
+        List<TOrder> tOrders = this.tOrderMapper.selectListLimit();
+        PageInfo<TOrderVo> pageInfo = new PageInfo<>();
+        BeanUtils.copyProperties(new PageInfo<>(tOrders), pageInfo);
         return pageInfo;
     }
 
@@ -77,7 +139,7 @@ public class TOrderServiceImpl implements TOrderService {
         TOrder tOrder = new TOrder();
         BeanUtils.copyProperties(tOrderDto, tOrder);
         this.tOrderMapper.insert(tOrder);
-        
+
         return this.findById(tOrder.getId());
     }
 
@@ -93,7 +155,7 @@ public class TOrderServiceImpl implements TOrderService {
         TOrder tOrder = new TOrder();
         BeanUtils.copyProperties(tOrderDto, tOrder);
         this.tOrderMapper.update(tOrder);
-        
+
         return this.findById(tOrder.getId());
     }
 

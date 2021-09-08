@@ -27,4 +27,6 @@ public class TOrder implements Serializable {
     private String createTime;
     //最后修改时间
     private String modifyTime;
+
+    private TOrderItem orderItem;
 }

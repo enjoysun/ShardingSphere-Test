@@ -1,6 +1,7 @@
 package com.myou.shardingsphere.mapper;
 
 import com.myou.shardingsphere.model.entity.TOrder;
+
 import java.util.List;
 
 /**
@@ -19,6 +20,12 @@ public interface TOrderMapper {
      */
     TOrder selectById(Long id);
 
+    TOrder selectDescById(Long id);
+
+    List<TOrder> selectInId(List<Long> ids);
+
+    List<TOrder> selectLtById(Long id);
+
     /**
      * 通过实体作为筛选条件查询
      *
@@ -26,6 +33,8 @@ public interface TOrderMapper {
      * @return 对象列表
      */
     List<TOrder> selectList(TOrder tOrder);
+
+    List<TOrder> selectListLimit();
 
     /**
      * 新增数据
