@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: sharding-tables
+    active: sharding-tables-hash
 #    active: sharding-databases
 server:
   port: 8080

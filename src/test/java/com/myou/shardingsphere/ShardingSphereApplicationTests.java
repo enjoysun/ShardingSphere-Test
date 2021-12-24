@@ -1,27 +1,22 @@
 package com.myou.shardingsphere;
 
 import com.github.pagehelper.PageInfo;
-import com.myou.shardingsphere.model.dto.GlobalDictionaryDto;
-import com.myou.shardingsphere.model.dto.TAddressDto;
-import com.myou.shardingsphere.model.dto.TOrderDto;
-import com.myou.shardingsphere.model.dto.TOrderItemDto;
-import com.myou.shardingsphere.model.vo.GlobalDictionaryVo;
-import com.myou.shardingsphere.model.vo.TAddressVo;
-import com.myou.shardingsphere.model.vo.TOrderItemVo;
-import com.myou.shardingsphere.model.vo.TOrderVo;
+import com.myou.shardingsphere.model.dto.*;
+import com.myou.shardingsphere.model.vo.*;
 import com.myou.shardingsphere.service.*;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@SpringBootTest(classes = ShardingSphereApplication.class)
 class ShardingSphereApplicationTests {
 
     @Autowired
@@ -119,6 +114,17 @@ class ShardingSphereApplicationTests {
     @Test
     void caseTablesOrderByQueryTest(){
         PageInfo<TOrderVo> pageList = orderService.selectListLimit();
+        System.out.println("ok");
+    }
+
+    /*测试按照时间水平分表数据落入*/
+    @Test
+    void tUserTableTest(){
+        TUserDto tUserDto = new TUserDto();
+        tUserDto.setId(1L);
+        tUserDto.setUserName("2021-05-08");
+        tUserDto.setPwd("123");
+        TUserVo add = userService.add(tUserDto);
         System.out.println("ok");
     }
 }

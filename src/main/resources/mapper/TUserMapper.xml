@@ -21,6 +21,13 @@
         where id = #{id}
     </select>
 
+    <!--根据ID查询单条数据-->
+    <select id="selectByName" resultMap="TUserMap">
+        select <include refid="column"></include>
+        from t_user
+        where user_name between #{begin} and #{end}
+    </select>
+
     <!--通过实体作为筛选条件查询-->
     <select id="selectList" resultMap="TUserMap">
         select <include refid="column"></include>

@@ -1,6 +1,8 @@
 package com.myou.shardingsphere.mapper;
 
 import com.myou.shardingsphere.model.entity.TUser;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -18,6 +20,8 @@ public interface TUserMapper {
      * @return 实例对象
      */
     TUser selectById(Long id);
+
+    List<TUser> selectByName(@Param("begin") String begin, @Param("end") String end);
 
     /**
      * 通过实体作为筛选条件查询

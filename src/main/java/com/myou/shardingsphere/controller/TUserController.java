@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.github.pagehelper.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 用户(TUser)表控制层
@@ -46,6 +47,17 @@ public class TUserController {
     @DeleteMapping("/remove/{id}")
     public boolean remove( @PathVariable(value = "id") Long id) {
         return this.tUserService.remove(id);
+    }
+
+    @PostMapping("/strategy-month")
+    public TUserVo monthTable( @RequestBody TUserDto tUserDto) {
+        return this.tUserService.add(tUserDto);
+    }
+
+    @GetMapping("/strategy-month-select")
+    public void monthGetTable( @RequestParam("begin") String begin,@RequestParam("end") String end) {
+        List<TUserVo> tUserVos = this.tUserService.findByName(begin, end);
+        System.out.println("ok");
     }
 
 }

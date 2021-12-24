@@ -4,6 +4,8 @@ import com.myou.shardingsphere.model.dto.TUserDto;
 import com.myou.shardingsphere.model.vo.TUserVo;
 import com.github.pagehelper.*;
 
+import java.util.List;
+
 /**
  * 用户(TUser)表服务接口
  *
@@ -53,5 +55,7 @@ public interface TUserService {
      * @return 是否成功
      */
     boolean remove(Long id);
+
+    List<TUserVo> findByName(String begin, String end);
 
 }
